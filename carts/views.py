@@ -37,8 +37,10 @@ def add_cart(request, product_id):
     cart.save()
     
     since_cart_item_exists = CartItem.objects.filter(product=product, cart=cart).exists()
+    # print(since_cart_item_exists)
     if since_cart_item_exists:
         cart_item = CartItem.objects.filter(product=product, cart=cart)
+        # print(cart_item)
         # existing variations database
         # current variations, product_variation list
         #  item_id, databse
@@ -46,26 +48,32 @@ def add_cart(request, product_id):
         id = []
         for item in cart_item:
             existing_variation = item.variations.all()
+            # print(existing_variation)
             existing_variation_list.append(list(existing_variation))
             id.append(item.id)
-            
-        print(existing_variation_list)
         
+        reversed_product_variation = list(reversed(product_variation))
         if product_variation in existing_variation_list:
             # increase the cart_item quantity
             index = existing_variation_list.index(product_variation)
             item_id = id[index]
             item = CartItem.objects.get(product=product, id=item_id)
             item.quantity += 1
-            item.save() 
+            item.save()
+            
+        elif reversed_product_variation in existing_variation_list:
+            index = existing_variation_list.index(reversed_product_variation)
+            item_id = id[index]
+            item = CartItem.objects.get(product=product, id=item_id)
+            item.quantity += 1
+            item.save()
         else:
             item = CartItem.objects.create(product=product, quantity=1, cart=cart)
             if len(product_variation) > 0:
                     item.variations.clear()
                     item.variations.add(*product_variation)
             item.save()
-                
-        
+
     else:
         cart_item = CartItem.objects.create(
             product = product,

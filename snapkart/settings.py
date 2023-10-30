@@ -27,8 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-import ssl
-ssl._create_default_https_context = ssl._create_unverified_context
+# import ssl
+# ssl._create_default_https_context = ssl._create_unverified_context
 
 
 # Application definition
@@ -149,7 +149,6 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'eddyjosh78@gmail.com'
 EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = True
-
 
 
 # Default primary key field type
